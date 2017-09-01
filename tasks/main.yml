@@ -3,4 +3,5 @@
 
 - include: setup.yml
 - include: files.yml
+- include: databases.yml
 - include: cleanup.yml

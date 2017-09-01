@@ -7,3 +7,7 @@
   run_once: true
   when: ocstore_environment is not defined
 
+- name: ocStore | Restore | Set archive name
+  set_fact:
+    ocstore_backup_arch_name: "{{ ocstore_backup_to }}/{{ ocstore_restore_from | basename }}"
+  run_once: true

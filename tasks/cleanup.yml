@@ -1,3 +1,7 @@
 ---
 # tasks/cleanup.yml
 
+- name: ocStore | Restore | Delete temporary directory
+  file:
+    path: "{{ tmp_dir.path }}"
+    state: "absent"

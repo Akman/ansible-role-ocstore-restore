@@ -1,0 +1,38 @@
+---
+# tasks/databases.yml
+
+- name: ocStore | Restore | Ensure database users are present
+  mysql_user:
+    name: "{{ item.name }}"
+    host: "{{ item.host | default('localhost') }}"
+    password: "{{ item.password }}"
+    priv: "{{ item.priv | default('*.*:USAGE') }}"
+    state: "{{ item.state | default('present') }}"
+    append_privs: "{{ item.append_privs | default('no') }}"
+  with_items: "{{ ocstore_mysql_users }}"
+  no_log: true
+  become: yes
+
+- name: ocStore | Restore | Ensure databases are absent
+  mysql_db:
+    name: "{{ item.name }}"
+    state: absent
+  with_items: "{{ ocstore_mysql_databases }}"
+  become: yes
+
+- name: ocStore | Restore | Create databases
+  mysql_db:
+    name: "{{ item.name }}"
+    collation: "{{ item.collation | default('utf8_general_ci') }}"
+    encoding: "{{ item.encoding | default('utf8') }}"
+    state: present
+  with_items: "{{ ocstore_mysql_databases }}"
+  become: yes
+
+- name: ocStore | Restore | Restore database schema and data
+  mysql_db:
+    name: "{{ item.name }}"
+    state: "import"
+    target: "{{ tmp_dir.path }}/{{ ocstore_backup_dumps_dir }}/{{ item.name }}.sql"
+  with_items: "{{ ocstore_mysql_databases }}"
+  become: yes
