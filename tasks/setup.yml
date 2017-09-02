@@ -1,12 +1,6 @@
 ---
 # tasks/setup.yml
 
-- name: ocStore | Restore | Set current environment
-  set_fact:
-    ocstore_environment: "{{ lookup('env','ANSIBLE_ENV') | default('development') }}"
-  run_once: true
-  when: ocstore_environment is not defined
-
 - name: ocStore | Restore | Set archive name
   set_fact:
     ocstore_backup_arch_name: "{{ ocstore_backup_to }}/{{ ocstore_restore_from | basename }}"
