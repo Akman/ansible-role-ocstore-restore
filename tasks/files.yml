@@ -1,25 +1,6 @@
 ---
 # tasks/files.yml
 
-- name: ocStore | Restore | Upload archive
-  synchronize:
-    archive: "no"
-    compress: "no"
-    mode: "push"
-    src: "{{ ocstore_restore_from }}"
-    dest: "{{ ocstore_backup_arch_name }}"
-
-- name: ocStore | Restore | Create temporary directory
-  tempfile:
-    path: "{{ ocstore_backup_to }}"
-    state: "directory"
-    suffix: "backup"
-  register: tmp_dir
-
-- name: ocStore | Restore | Unpack archive
-  shell: "cd {{ tmp_dir.path }}; tar -xf {{ ocstore_backup_arch_name }} -C {{ tmp_dir.path }}"
-  become: yes
-
 - name: ocStore | Restore | Sync files
   shell: "rsync -amq {{ tmp_dir.path }}/{{ ocstore_backup_files_dir }}/{{ item.path | basename }}/ {{ item.path }}"
   with_items: "{{ ocstore_backup_from }}"

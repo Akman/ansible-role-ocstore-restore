@@ -1,0 +1,21 @@
+---
+# tasks/archive.yml
+
+- name: ocStore | Restore | Upload archive
+  synchronize:
+    archive: "no"
+    compress: "no"
+    mode: "push"
+    src: "{{ ocstore_restore_from }}"
+    dest: "{{ ocstore_backup_arch_name }}"
+
+- name: ocStore | Restore | Create temporary directory
+  tempfile:
+    path: "{{ ocstore_backup_to }}"
+    state: "directory"
+    suffix: "backup"
+  register: tmp_dir
+
+- name: ocStore | Restore | Unpack archive
+  shell: "cd {{ tmp_dir.path }}; tar -xf {{ ocstore_backup_arch_name }} -C {{ tmp_dir.path }}"
+  become: yes

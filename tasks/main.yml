@@ -2,6 +2,7 @@
 # tasks/main.yml
 
 - include: setup.yml
+- include: archive.yml
 - include: files.yml
 - include: databases.yml
 - include: cleanup.yml
