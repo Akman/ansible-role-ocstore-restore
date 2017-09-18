@@ -9,6 +9,12 @@
     src: "{{ ocstore_restore_from }}"
     dest: "{{ ocstore_backup_arch_name }}"
 
+- name: ocStore | Restore | Set archive permissions
+  file:
+    path: "{{ ocstore_backup_arch_name }}"
+    state: "file"
+    mode: "600"
+
 - name: ocStore | Restore | Create temporary directory
   tempfile:
     path: "{{ ocstore_backup_to }}"
