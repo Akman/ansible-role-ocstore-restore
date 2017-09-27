@@ -26,7 +26,6 @@
     state: "{{ item.state | default('present') }}"
     append_privs: "{{ item.append_privs | default('no') }}"
   with_items: "{{ ocstore_mysql_users }}"
-  no_log: true
   become: yes
 
 - name: ocStore | Restore | Restore database schema and data
