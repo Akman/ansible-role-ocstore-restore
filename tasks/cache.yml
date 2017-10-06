@@ -1,0 +1,30 @@
+---
+# tasks/cache.yml
+
+- name: ocStore | Restore | Enumerate system cache files
+  find:
+    paths: "{{ ocstore_www_root }}/{{ ocstore_current_dir }}/{{ item.path }}"
+    file_type: "any"
+    patterns: "{{ item.patterns }}"
+    use_regex: True
+  with_flattened:
+    - "{{ ocstore_system_cache }}"
+  register: ocstore_cache_files
+
+- name: ocStore | Restore | Build command list for cleanup system cache
+  set_fact:
+    ocstore_rm_cmd: |
+      {% for result in ocstore_cache_files.results %}
+        {% for item in result.files %}
+          rm -rf {{ item.path }};
+        {% endfor %}
+      {% endfor %}
+
+- name: ocStore | Restore | Pack command list for cleanup system cache
+  set_fact:
+    ocstore_rm_cmd: "{{ ocstore_rm_cmd | regex_replace(';\\s+rm -rf ', ';rm -rf ') | trim }}"
+  when: ocstore_rm_cmd is defined
+
+- name: ocStore | Restore | Ensure system cache files and folders absent
+  shell: "{{ ocstore_rm_cmd }}"
+  when: ocstore_rm_cmd is defined and ocstore_rm_cmd != ''

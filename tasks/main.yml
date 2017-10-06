@@ -4,5 +4,8 @@
 - import_tasks: setup.yml
 - import_tasks: archive.yml
 - import_tasks: files.yml
+- import_tasks: permissions.yml
+  when: ocstore_environment != 'development'
 - import_tasks: databases.yml
+- import_tasks: cache.yml
 - import_tasks: cleanup.yml

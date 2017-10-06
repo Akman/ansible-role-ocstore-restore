@@ -1,6 +1,15 @@
 ---
 # tasks/files.yml
 
+- name: ocStore | Restore | Ensure shared folder exists
+  file:
+    state: "directory"
+    path: "{{ ocstore_www_root }}/{{ ocstore_shared_dir }}"
+    mode: "750"
+    owner: "{{ ocstore_www_owner_user }}"
+    group: "{{ ocstore_www_owner_group }}"
+  become: yes
+
 - name: ocStore | Restore | Sync files
   shell: "rsync -amq {{ tmp_dir.path }}/{{ ocstore_backup_files_dir }}/{{ item.path | basename }}/ {{ item.path }}"
   with_items: "{{ ocstore_backup_from }}"
