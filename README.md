@@ -1,4 +1,4 @@
-# Ansible Role: ocstore-restore
+# Ansible Role: ocstore_restore
 
 Restore ocStore on Linux.
 
@@ -18,7 +18,7 @@ None.
 
     - hosts: all
       roles:
-        - Akman.ocstore-restore
+        - Akman.ocstore_restore
 
 *Inside `vars/main.yml`*:
 
